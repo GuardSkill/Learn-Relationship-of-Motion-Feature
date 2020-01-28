@@ -256,3 +256,124 @@ def resnet152(**kwargs):
     """
     model = ResNeXt(ResNeXtBottleneck, [3, 8, 36, 3], **kwargs)
     return model
+
+class new_fusion_model(nn.Module):
+    """ attention """
+
+    def __init__(self, feat_dim=400):
+        super(new_fusion_model, self).__init__()
+        self.feat_dim = feat_dim
+        self.weight_layer = nn.Linear(feat_dim * 2, feat_dim*2*2)
+        self.weight_layer2=nn.Linear(feat_dim*2*2,feat_dim * 2)
+        self.fc = nn.Linear(feat_dim * 2, feat_dim)
+
+        # self.fc = nn.Linear(feat_dim, feat_dim)
+        # self.weight_layer.bias.data.zero_()
+        # self.weight_layer.weight.data.zero_()
+        # self.weight_layer2.bias.data.zero_()
+        # self.weight_layer2.weight.data.zero_()
+        # nn.init.xavier_uniform_(self.fc.weight)
+
+        # nn.init.xavier_uniform_(self.q)
+        # nn.init.xavier_uniform_(self.fc.weight)
+        # nn.init.constant_(self.fc.bias, 0)
+        # self.fc.bias.data.zero_()  # NAN init these paprameter as zeros
+        # self.fc.weight.data.zero_()
+
+    def forward(self, x_mar,x_flow):
+        # Xs: batch*feature-length*seq                              [Batch,Dimension]
+        x_mar=F.normalize(x_mar)
+        x_flow=F.normalize(x_flow)
+        X=torch.cat([x_mar,x_flow],-1)
+        weights=F.softmax(self.weight_layer2(self.weight_layer(X)),dim=-1)
+        r = torch.mul(X, weights)
+        Y=torch.sum(r.view(-1,self.feat_dim,2),dim=-1)
+        return weights.squeeze(),Y
+
+
+class fusion_model(nn.Module):
+    """ attention """
+
+    def __init__(self, feat_dim=400):
+        super(fusion_model, self).__init__()
+        self.feat_dim = feat_dim
+        self.weight_layer = nn.Linear(feat_dim * 2, int(feat_dim/2))
+        self.weight_layer2=nn.Linear(int(feat_dim/2),2)
+        self.fc = nn.Linear(feat_dim * 2, feat_dim)
+
+        # self.fc = nn.Linear(feat_dim, feat_dim)
+        # self.weight_layer.bias.data.zero_()
+        # self.weight_layer.weight.data.zero_()
+        # self.weight_layer2.bias.data.zero_()
+        # self.weight_layer2.weight.data.zero_()
+        # nn.init.xavier_uniform_(self.fc.weight)
+
+        # nn.init.xavier_uniform_(self.q)
+        # nn.init.xavier_uniform_(self.fc.weight)
+        # nn.init.constant_(self.fc.bias, 0)
+        # self.fc.bias.data.zero_()  # NAN init these paprameter as zeros
+        # self.fc.weight.data.zero_()
+
+    def forward(self, x_mar,x_flow):
+        # Xs: batch*feature-length*seq                              [Batch,Dimension]
+        x_mar=F.normalize(x_mar)
+        x_flow=F.normalize(x_flow)
+        X=torch.cat([x_mar,x_flow],-1)
+        Xs= torch.stack([x_mar, x_flow], -1)
+        weights=F.sigmoid(self.weight_layer2(self.weight_layer(X)))
+        weights=weights.unsqueeze(1)
+        r = torch.mul(Xs, weights)
+        Y=torch.sum(r,dim=-1)
+        return [weights.squeeze(),Y]
+
+class Attention(nn.Module):
+    """ attention """
+
+    def __init__(self, feat_dim=128):
+        super(Attention, self).__init__()
+        self.feat_dim = feat_dim
+        self.q_mar= nn.Parameter(torch.ones((1,1,feat_dim)) * 0.0, requires_grad=True)
+        self.q_flow = nn.Parameter(torch.ones((1,1, feat_dim)) * 0.0, requires_grad=True)
+
+        # self.q = nn.Parameter(torch.ones((1, 1, feat_dim)), requires_grad=True)
+
+        self.fc = nn.Linear(feat_dim, feat_dim)
+        self.tanh = nn.Tanh()
+
+        # nn.init.xavier_uniform_(self.q)
+        # nn.init.xavier_uniform_(self.fc.weight)
+        # nn.init.constant_(self.fc.bias, 0)
+        self.fc.bias.data.zero_()  # NAN init these paprameter as zeros
+        self.fc.weight.data.zero_()
+
+    def squash(self, x):
+        x2 = x.pow(2).sum(dim=-1, keepdim=True)
+        v = (x2 / (1.0 + x2)) * (x / x2.sqrt())
+        return v
+
+    def forward(self, x_mar,x_flow):
+        # Xs: batch*feature-length*seq                              [Batch,Dimension]
+        x_mar=F.normalize(x_mar)
+        x_flow=F.normalize(x_flow)
+        Xs=torch.stack([x_mar,x_flow],-1)
+        N, C, K = Xs.shape  # N: batch C: channel(feature dimention) K: Frames  [3,128,20]
+        score1 = torch.matmul(self.q_mar, x_mar.unsqueeze(-1))  # N*1*K ==[1,2,128] *[3,128,1]
+        score2 = torch.matmul(self.q_flow, x_flow.unsqueeze(-1))  # N*1*K ==[1,2,128] *[3,128,20]
+        score=torch.cat([score1, score2], -1)
+        score = F.softmax(score, dim=-1)
+        r = torch.mul(Xs, score)  # element-wise multiply  [3,128,2]
+        r = torch.sum(r, dim=-1)  # N*C  [3,128]
+
+        new_q = self.fc(r)  # N*C
+        new_q = self.tanh(new_q)
+        new_q = new_q.view(N, 1, C)
+
+        new_score = torch.matmul(new_q, Xs)
+        new_score = F.softmax(new_score, dim=-1)
+
+        o = torch.mul(Xs, new_score)
+        o = torch.sum(o, dim=-1)  # N*C
+
+        # o = self.squash(o)
+
+        return o

@@ -58,7 +58,7 @@ def test():
     model2.eval()
     
     accuracies = AverageMeter()
-    
+    root_dir = result_path
     if opt.log:
         if opt.only_RGB:
             f = open(os.path.join(root_dir, "test_RGB_MARS_{}{}_{}_{}_{}.txt".format(opt.model, opt.model_depth, opt.dataset, opt.split, opt.sample_duration)), 'w+')
@@ -74,7 +74,7 @@ def test():
             if opt.only_RGB:
                 inputs = torch.Tensor(int(clip.shape[1]/opt.sample_duration), 3, opt.sample_duration, opt.sample_size, opt.sample_size)
                 for k in range(inputs.shape[0]):
-                    inputs[k,:,:,:,:] = clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]   
+                    inputs[k,:,:,:,:] = clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]
 
                 inputs_var1 = Variable(inputs)
                 inputs_var2 = Variable(inputs)
@@ -84,10 +84,10 @@ def test():
                 inputs1 = torch.Tensor(int(RGB_clip.shape[1]/opt.sample_duration), 3, opt.sample_duration, opt.sample_size, opt.sample_size)
                 inputs2 = torch.Tensor(int(Flow_clip.shape[1]/opt.sample_duration), 2, opt.sample_duration, opt.sample_size, opt.sample_size)
                 for k in range(inputs1.shape[0]):
-                    inputs1[k,:,:,:,:] = RGB_clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]  
+                    inputs1[k,:,:,:,:] = RGB_clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]
                     inputs2[k,:,:,:,:] = Flow_clip[:,k*opt.sample_duration:(k+1)*opt.sample_duration,:,:]
                 inputs_var1 = Variable(inputs1)
-                inputs_var2 = Variable(inputs2)   
+                inputs_var2 = Variable(inputs2)
             
 
             outputs_var1= model1(inputs_var1)

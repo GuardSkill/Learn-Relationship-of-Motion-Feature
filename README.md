@@ -1,4 +1,4 @@
-# MARS: Motion-Augmented RGB Stream for Action Recognition
+# Learning and Distillating the Internal Relationship of Motion Features in Action Recognition
 
 By Nieves Crasto, Philippe Weinzaepfel, Karteek Alahari and Cordelia Schmid
 

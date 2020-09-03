@@ -43,14 +43,9 @@ We release the testing code along trained models.
 [OFF](https://arxiv.org/pdf/1711.11152.pdf)					|RGB+Flow |none      | 96.0   | 74.2   | --- 		|
 **MARS+RGB+Flow**            								|RGB+Flow |Kinetics  |**98.1**|**80.9**|**53.0**	| -->
 
-## Citing MARS
+## Citing Dual-action Stream
 ```
-@inproceedings{crasto2019mars,
-  title={{MARS: Motion-Augmented RGB Stream for Action Recognition}},
-  author={Crasto, Nieves and Weinzaepfel, Philippe and Alahari, Karteek and Schmid, Cordelia},
-  booktitle={CVPR},
-  year={2019}
-}
+
 ```
 
 ## Contents
@@ -113,7 +108,7 @@ python utils1/extract_frames.py path_to_video_files path_to_extracted_frames sta
     ```
 ## Models
 
-Trained models can be found [here](https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing). The names of the models are in the form of 
+<-- Trained models can be found [here](https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing). The names of the models are in the form of 
 
 ```
 stream_dataset_frames.pth     
@@ -121,7 +116,7 @@ stream_dataset_frames.pth
 RGB_Kinetics_16f.pth indicates --modality RGB --dataset Kinetics --sample_duration 16
 ```
 
-For HMDB51 and UCF101, we have only provided trained models for the first split.
+For HMDB51 and UCF101, we have only provided trained models for the first split. -->
 
 ## Testing script
 For RGB stream:

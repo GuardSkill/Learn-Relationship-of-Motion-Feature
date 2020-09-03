@@ -108,7 +108,7 @@ python utils1/extract_frames.py path_to_video_files path_to_extracted_frames sta
     ```
 ## Models
 
-<-- Trained models can be found [here](https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing). The names of the models are in the form of 
+<!-- #### Trained models can be found [here](https://drive.google.com/drive/folders/1OVhBnZ_FmqMSj6gw9yyrxJJR8yRINb_G?usp=sharing). The names of the models are in the form of 
 
 ```
 stream_dataset_frames.pth     
@@ -116,7 +116,8 @@ stream_dataset_frames.pth
 RGB_Kinetics_16f.pth indicates --modality RGB --dataset Kinetics --sample_duration 16
 ```
 
-For HMDB51 and UCF101, we have only provided trained models for the first split. -->
+For HMDB51 and UCF101, we have only provided trained models for the first split. 
+-->
 
 ## Testing script
 For RGB stream:

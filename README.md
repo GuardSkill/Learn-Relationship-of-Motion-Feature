@@ -98,7 +98,6 @@ python utils1/extract_frames.py path_to_video_files path_to_extracted_frames sta
 ```
 
 * To extract optical flows + frames from videos 
-    * Build
     ```
     export OPENCV=path_where_opencv_is_installed
 
@@ -133,7 +132,7 @@ python3 test_single_stream.py
 --batch_size 1 --n_classes 101 --model resnext --model_depth 101 --log 0 --dataset UCF101 
 --modality RGB --sample_duration 16 --split 1 --only_RGB 
 --resume_path1 "trained_models/UCF101/RGB_UCF101_16f.pth" --frame_dir "/home/lulu/Dataset/videos/ucf_frames/"
- --result_path "test_results/" --annotation_path "/home/lulu/project/temporal-segment-networks/data/ucf101_splits"
+ --result_path "test_results/" --annotation_path "/data/ucf101_splits"
 ```
 
 For Flow stream:
@@ -146,7 +145,7 @@ python test_single_stream.py --batch_size 1 --n_classes 51 --model resnext --mod
 --result_path "results/"
 ```
 
-For single stream MARS: 
+For single stream DS: 
 
 ```
 python test_single_stream.py --batch_size 1 --n_classes 51 --model resnext --model_depth 101 \
@@ -158,13 +157,13 @@ python test_single_stream.py --batch_size 1 --n_classes 51 --model resnext --mod
 
 python3 test_single_stream.py --batch_size 1 --n_classes 101 --model resnext --model_depth 101 --log 0 
 --dataset UCF101 --modality RGB --sample_duration 16 --split 1 --only_RGB  
---resume_path1 "trained_models/UCF101/MARS_UCF101_16f.pth" --frame_dir "/home/lulu/Dataset/videos/ucf_frames"
- --annotation_path "/home/lulu/project/temporal-segment-networks/data/ucf101_splits" --result_path "test_results/"
+--resume_path1 "trained_models/UCF101/UCF101_16f.pth" --frame_dir "Dataset/videos/ucf_frames"
+ --annotation_path "data/ucf101_splits" --result_path "test_results/"
  
  python3 test_single_stream.py --batch_size 1 --n_classes 101 --model resnext --model_depth 101 --log 0 
  --dataset UCF101 --modality RGB --sample_duration 16 --split 1 --only_RGB 
   --resume_path1 "results/1e-5/MARS_UCF101_1_train_batch16_sample112_clip16_lr0.001_nesterovFalse_manualseed1_modelresnext101_ftbeginidx4_layerdict_alpha50.0_67.pth" 
-  --frame_dir "/home/lulu/Dataset/videos/ucf_frames" --annotation_path "/home/lulu/project/temporal-segment-networks/data/ucf101_splits" 
+  --frame_dir "Dataset/videos/ucf_frames" --annotation_path "data/ucf101_splits" 
   --result_path "test_results/"
 ```
 
@@ -182,7 +181,7 @@ python test_two_stream.py --batch_size 1 --n_classes 101 --model resnext --model
  --sample_duration 16 --split 1 --only_RGB --dataset UCF101 
 --resume_path1 "trained_models/UCF101/RGB_UCF101_16f.pth" 
 --resume_path2 "results/1e-5/UCF101/MARS_UCF101_0.9516256938937351_67.pth" 
---frame_dir "/home/lulu/Dataset/videos/ucf_frames/" --annotation_path "/home/lulu/project/temporal-segment-networks/data/ucf101_splits" 
+--frame_dir "Dataset/videos/ucf_frames/" --annotation_path "data/ucf101_splits" 
 --result_path "results/RGB_MAR"
 ```
 
@@ -202,7 +201,7 @@ python test_two_stream.py --batch_size 1 --n_classes 101 --model resnext --model
 --log 0 --dataset UCF101 --modality RGB_Flow --sample_duration 16 --split 1 
 --resume_path1 "results/1e-5/UCF101/MARS_UCF101_0.9516256938937351_67.pth" 
 --resume_path2 "trained_models/UCF101/Flow_UCF101_16f.pth" 
---frame_dir "/home/lulu/Dataset/videos/tv1_flows" 
+--frame_dir "Dataset/videos/tv1_flows" 
 --annotation_path "dataset/ucf101_splits" 
 --result_path "results/Flow_MAR"
 ```
@@ -215,7 +214,7 @@ python test_fusion_modules.py
 --resume_path1 "results/1e-5/UCF101/MARS_UCF101_0.9516256938937351_67.pth" 
 --resume_path2 "trained_models/UCF101/Flow_UCF101_16f.pth"
 --resume_path3 "results/fusion/UCF101/Fusion_UCF101_1_train_batch16_sample112_clip16_lr0.1_nesterovFalse_manualseed1_modelresnext101_ftbeginidx4_alpha50.0_15.pth"  
---frame_dir "/home/lulu/Dataset/videos/tv1_flows" 
+--frame_dir "Dataset/videos/tv1_flows" 
 --annotation_path "dataset/ucf101_splits" 
 --result_path "results/Flow_MAR"
 ```
@@ -250,7 +249,7 @@ python MARS_train.py --dataset HMDB51 --modality RGB_Flow --split 1  \
 python3 MARS_train.py --dataset UCF101 --modality RGB_Flow --split 1  --n_classes 400 
 --n_finetune_classes 101 --batch_size 16 --log 1 --sample_duration 16 --model resnext 
 --model_depth 101 --ft_begin_index 4 --output_layers 'dict' --MARS_alpha 50 
---frame_dir "/home/lulu/Dataset/videos/tv1_flows" 
+--frame_dir "Dataset/videos/tv1_flows" 
 --annotation_path "dataset/ucf101_splits" 
 --pretrain_path "trained_models/Kinetics/MARS_Kinetics_16f.pth" 
 --resume_path1 "trained_models/UCF101/Flow_UCF101_16f.pth" 

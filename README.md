@@ -1,12 +1,10 @@
 # Learning and Distillating the Internal Relationship of Motion Features in Action Recognition
 
-By Nieves Crasto, Philippe Weinzaepfel, Karteek Alahari and Cordelia Schmid
+By Lu Lu, Siyuan Li, Niannian Chen, Lin Gao,Yong Fan, Yong Jiang and Ling Wu
 
-MARS is a strategy to learn a stream that takes only RGB frames as input
-but leverages both appearance and motion information from them. This is
-achieved by training a network to minimize the loss between its features and
-the Flow stream, along with the cross entropy loss for recognition.
-For more details, please refer to our [CVPR 2019 paper](https://hal.inria.fr/hal-02140558/document) and our [website](https://europe.naverlabs.com/Research/Computer-Vision/Video-Analysis/MARS).
+This work proposes a novel distillation learning strategy (Dual-action Stream Network) to sufficiently learn and mimic the representation of the motion streams. Besides, we propose a lightweight attention-based fusion module to uniformly exploit both appearance and motion information.
+
+For more details, please refer to our ICONIP 2020 paper and our [website](https://github.com/GuardSkill/Learn-Relationship-of-Motion-Feature).
 
 We release the testing code along trained models. 
 
